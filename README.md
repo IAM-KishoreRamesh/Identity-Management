@@ -39,12 +39,6 @@ It serves as a comprehensive architecture lab in preparation for the **SC-300 (M
 
 ```mermaid
 graph TD
-    %% Define Styles
-    classDef external fill:#f9f9f9,stroke:#333,stroke-width:2px;
-    classDef core fill:#e1f5fe,stroke:#0288d1,stroke-width:2px;
-    classDef sec fill:#ffebee,stroke:#d32f2f,stroke-width:2px;
-    classDef gov fill:#e8f5e9,stroke:#388e3c,stroke-width:2px;
-
     %% External Systems
     subgraph External ["External / On-Prem"]
         HR["HR Data (CSV)"]
@@ -84,12 +78,6 @@ graph TD
 
     Bicep -->|"Deploy"| LA
     EntraID -.->|"Diagnostic Logs"| LA
-
-    %% Apply Styles
-    class External,HR,Sync external;
-    class EntraID,Graph,Users,Groups core;
-    class Controls,CA,PIM,Gov sec;
-    class Telemetry,Bicep,LA gov;
 ```
 
 Throughout the 20-day deployment, several enterprise-grade engineering practices were enforced:
