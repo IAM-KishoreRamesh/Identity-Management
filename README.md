@@ -37,6 +37,61 @@ It serves as a comprehensive architecture lab in preparation for the **SC-300 (M
 
 ## 🏗️ Architectural Engineering Highlights
 
+```mermaid
+graph TD
+    %% Define Styles
+    classDef external fill:#f9f9f9,stroke:#333,stroke-width:2px;
+    classDef core fill:#e1f5fe,stroke:#0288d1,stroke-width:2px;
+    classDef sec fill:#ffebee,stroke:#d32f2f,stroke-width:2px;
+    classDef gov fill:#e8f5e9,stroke:#388e3c,stroke-width:2px;
+
+    %% External Systems
+    subgraph External ["External / On-Prem"]
+        HR["HR Data (CSV)"]
+        Sync["Python Sync Engine"]
+    end
+
+    %% Entra ID Core
+    subgraph EntraID ["Microsoft Entra ID"]
+        Graph["Microsoft Graph API Bridge"]
+        Users["User Identities"]
+        Groups["Dynamic Security Groups"]
+    end
+
+    %% Security & Governance
+    subgraph Controls ["Zero-Trust Controls"]
+        CA["Conditional Access (MFA & Risk)"]
+        PIM["Privileged Identity Mgmt (JIT)"]
+        Gov["Entitlement Mgmt & Access Reviews"]
+    end
+    
+    %% Telemetry
+    subgraph Telemetry ["Azure SecOps"]
+        Bicep["Bicep IaC"]
+        LA[("Log Analytics")]
+    end
+
+    %% Relationships
+    HR -->|"Trigger"| Sync
+    Sync -->|"OAuth 2.0 Client Credentials"| Graph
+    Graph -->|"Provision / Kill Sequence"| Users
+    Users -->|"Attribute Sync"| Groups
+    
+    Users -->|"Authentication"| CA
+    Groups -->|"Assigned via"| Gov
+    Gov -.->|"Attestation"| Users
+    PIM -->|"Time-bound Elevation"| Users
+
+    Bicep -->|"Deploy"| LA
+    EntraID -.->|"Diagnostic Logs"| LA
+
+    %% Apply Styles
+    class External,HR,Sync external;
+    class EntraID,Graph,Users,Groups core;
+    class Controls,CA,PIM,Gov sec;
+    class Telemetry,Bicep,LA gov;
+```
+
 Throughout the 20-day deployment, several enterprise-grade engineering practices were enforced:
 
 * **Infrastructure as Code (IaC):** Strict segregation of duties was enforced. The Data Plane (Identity) was managed via **Microsoft Graph PowerShell**, while the Control Plane (Log Analytics / Telemetry) was provisioned using **Azure Bicep**.
