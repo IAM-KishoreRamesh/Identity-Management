@@ -41,7 +41,7 @@ It serves as a comprehensive architecture lab in preparation for the **SC-300 (M
 graph TD
     %% External Systems
     subgraph External ["External / On-Prem"]
-        HR["HR Data (CSV)"]
+        HR["User Data (CSV)"]
         Sync["Python Sync Engine"]
     end
 
